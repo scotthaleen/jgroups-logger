@@ -1,0 +1,4 @@
+language: clojure
+lein: 2.7.1
+before_script: lein ancient
+script: lein travis-ci
