@@ -9,7 +9,9 @@
    :init init
    :implements [org.jgroups.logging.Log]
    ;; documentation says the constructor will only be passed String or Class
-   :constructors {[Object] []}))
+   :constructors {[Object] []
+                  [Class] []
+                  [String] []}))
 
 (defmulti classname class)
 (defmethod classname Class [x] (print-str x))
@@ -23,7 +25,7 @@
   (when (log-impl/enabled? logger level)
     (log/log* logger level nil (apply (partial format frmt) args))))
 
-(defn -init
+(defn init*
   "constructor"
   [cl]
   [[] (let [clazz (classname cl)
@@ -33,6 +35,11 @@
          :log (partial log/log* logger)
          :logf (partial logf* logger)
          :enabled? (partial log-impl/enabled? logger)})])
+
+(def -init init*)
+(def -init-Class init*)
+(def -init-String init*)
+(def -init-Object init*)
 
 (defn -info
   [this msg]
